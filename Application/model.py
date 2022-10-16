@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     u_id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(64), unique=True, index=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=True)
@@ -23,22 +23,6 @@ class User(UserMixin, db.Model):
     def get_id(self):
       return self.u_id
     
-    def token_required(f):
-      @wraps(f)
-      def decorated(*args, **kwargs):
-        token = None
-        if 'x-access-token' in request.headers:
-          token = request.headers['x-access-token']
-        if not token:
-          return ##return error message
-        try:
-          data = jwt.decode(token, app.config['SECRET_KEY'])
-          current_user = User.query.filter_by(u_id=data['u_id']).first()
-        except:
-          return ##raise error
-        return f(current_user, *args, **kwargs)
-      return decorated
-
     @property
     def password(self):
         raise ##AttributeError('password is not a readable attribute')
