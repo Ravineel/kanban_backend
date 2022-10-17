@@ -1,5 +1,4 @@
 import os
-from re import template
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api, Resource
@@ -8,7 +7,7 @@ from Application.database import db
 
 
 app=None
-api-None
+api=None
 
 def create_app():
   app=Flask(__name__,template_folder='templates',static_folder='assets')
@@ -26,7 +25,11 @@ def create_app():
 
 app,api = create_app()
 
-from Application.APIs import *
+from Application.API.Login_Signup.log_sign import Login,Signup
+
+
+
+api.add_resource(Signup,'/signup')
 
 
 if __name__ == "__main__":
