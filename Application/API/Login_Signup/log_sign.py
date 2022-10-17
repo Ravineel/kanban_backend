@@ -1,12 +1,13 @@
+from ast import arg
 from flask_restful import Api, Resource, fields, marshal_with, reqparse
 from Application.Validation import *
-from Application.models import User
+from Application.model import *
 from Application.database import db
 from flask import current_app as app
 import werkzeug
-from datetime import Date
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
+import datetime
 
 login = reqparse.RequestParser()
 login.add_argument('username', type=str, required=True, help='username is required')
@@ -32,19 +33,21 @@ class Signup(Resource):
 
   def post(self):
     args = create_usr.parse_args()
-    fname = args['fname']
-    lname = args['lname']
-    mail = args['mail']
-    dob = args['dob']
-    username = args['username']
-    password = args['password']
+    fname = args.get('fname')
+    lname = args.get('lname')
+    dob = args.get('dob')
+    mail = args.get('mail')
+    username = args.get('username')
+    password = args.get('password')
     role="user"
+    # created=datetime.datetime.now().strftime("%x")
+    created="2022-10-17 00:00:00"
 
     if fname is None:
       msg="First name is required"
       code = 400
       error = "SIGN001"
-      raise BusinessValidationError(code,error.msg) ##return error message
+      raise BusinessValidationError(code,error.msg) 
     
     if mail is None:
       msg="Email is required"
@@ -82,23 +85,18 @@ class Signup(Resource):
       code = 400
       error = "SIGN007"
       raise BusinessValidationError(code,error.msg)
-
     try:
-      new_user =User(
-        public_id=str(uuid.uuid4()),
-        username=username,
-        password=generate_password_hash(password),
-        email=mail,
-        first_name=fname,
-        last_name=lname,
-        date_of_birth=dob,
-        role=role
-      )
+      pwd =generate_password_hash(password)
+      pid=str(uuid.uuid4())
+      print("here2",pid,pwd,created,dob)
+      new_user =User(public_id=pid,username=username,password_hash=pwd,email=mail,first_name=fname,last_name=lname,date_of_birth=created,role=role,account_created_at=created)
+      print(new_user)
       db.session.add(new_user)
       db.session.commit()
+      print("here3")
       return {"message":"User created successfully"}, 200
-    except:
-      return {"message":"Something went wrong"}, 500
+    except Exception as e:
+      return {"message":e}, 500
       
 
 

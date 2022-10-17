@@ -13,7 +13,7 @@ class Config():
 
 class LocalDevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///../db/db.sqlite'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///../db/db.sqlite3'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
     
