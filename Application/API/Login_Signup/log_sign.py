@@ -7,17 +7,51 @@ from flask import current_app as app
 import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
-import datetime
+from datetime import datetime, timedelta
+
 
 login = reqparse.RequestParser()
 login.add_argument('username', type=str, required=True, help='username is required')
 login.add_argument('password', type=str, required=True, help='password is required')
 
 class Login(Resource):
-    def post(self):
-        args = login.parse_args()
-        username = args['username']
-        password = args['password']
+  def post(self):
+    args = login.parse_args()
+    username = args['username']
+    password = args['password']
+
+    if username is None:
+      msg="username is required"
+      code=404
+      error="LR001"
+      raise BusinessValidationError(code,error,msg)
+    
+    if password is None:
+      msg="password is required"
+      code=404
+      error="LR002"
+      raise BusinessValidationError(code,error,msg)
+    
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+      msg="username not found"
+      code=404
+      error="LR003"
+      raise BusinessValidationError(code,error,msg)
+    else:
+      if check_password_hash(user.password_hash, password):
+        token = jwt.encode({
+            'public_id': user.public_id,
+            'exp' : datetime.utcnow() + timedelta(minutes = 30)
+        }, app.config['SECRET_KEY'])
+  
+        return make_response(jsonify({'token' : token}), 200)
+        
+      else:
+        msg="password is incorrect"
+        code=404
+        error="LR004"
+        raise BusinessValidationError(code,error,msg)
         
 
 
@@ -47,44 +81,44 @@ class Signup(Resource):
       msg="First name is required"
       code = 400
       error = "SIGN001"
-      raise BusinessValidationError(code,error.msg) 
+      raise BusinessValidationError(code,error,msg) 
     
     if mail is None:
       msg="Email is required"
       code = 400
       error = "SIGN002"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
     
     if dob is None:
       msg="Date of birth is required"
       code = 400
       error = "SIGN003"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
     
     if username is None:
       msg="Username is required"
       code = 400
       error = "SIGN004"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
 
     if password is None:
       msg="Password is required"
       code = 400
       error = "SIGN005"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
 
     if User.query.filter_by(email=mail).first():
       msg="Email already exists"
       code = 400
       error = "SIGN006"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
 
  
     if User.query.filter_by(username=username).first():
       msg="Username already exists"
       code = 400
       error = "SIGN007"
-      raise BusinessValidationError(code,error.msg)
+      raise BusinessValidationError(code,error,msg)
     try:
       pwd =generate_password_hash(password)
       pid=str(uuid.uuid4())
