@@ -41,40 +41,64 @@ class Signup(Resource):
     role="user"
 
     if fname is None:
-      return ##return error message
+      msg="First name is required"
+      code = 400
+      error = "SIGN001"
+      raise BusinessValidationError(code,error.msg) ##return error message
+    
     if mail is None:
-      return ##return error message
+      msg="Email is required"
+      code = 400
+      error = "SIGN002"
+      raise BusinessValidationError(code,error.msg)
+    
     if dob is None:
-      return ##return error message
+      msg="Date of birth is required"
+      code = 400
+      error = "SIGN003"
+      raise BusinessValidationError(code,error.msg)
     
     if username is None:
-      return ##return error message
+      msg="Username is required"
+      code = 400
+      error = "SIGN004"
+      raise BusinessValidationError(code,error.msg)
 
     if password is None:
-      return ##return error message
-    
+      msg="Password is required"
+      code = 400
+      error = "SIGN005"
+      raise BusinessValidationError(code,error.msg)
+
     if User.query.filter_by(email=mail).first():
-      return ##return error message
-    else:
-      if User.query.filter_by(username=username).first():
-        return
-      else:
-        try:
-          new_user =User(
-            public_id=str(uuid.uuid4()),
-            username=username,
-            password=generate_password_hash(password),
-            email=mail,
-            first_name=fname,
-            last_name=lname,
-            date_of_birth=dob,
-            role=role
-          )
-          db.session.add(new_user)
-          db.session.commit()
-          return ##return success message
-        except:
-          return ##return error message
+      msg="Email already exists"
+      code = 400
+      error = "SIGN006"
+      raise BusinessValidationError(code,error.msg)
+
+ 
+    if User.query.filter_by(username=username).first():
+      msg="Username already exists"
+      code = 400
+      error = "SIGN007"
+      raise BusinessValidationError(code,error.msg)
+
+    try:
+      new_user =User(
+        public_id=str(uuid.uuid4()),
+        username=username,
+        password=generate_password_hash(password),
+        email=mail,
+        first_name=fname,
+        last_name=lname,
+        date_of_birth=dob,
+        role=role
+      )
+      db.session.add(new_user)
+      db.session.commit()
+      return {"message":"User created successfully"}, 200
+    except:
+      return {"message":"Something went wrong"}, 500
       
 
 

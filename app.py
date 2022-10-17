@@ -26,7 +26,9 @@ def create_app():
 
 app,api = create_app()
 
-from Application.APIs import *
+from Application.API import *
+
+api.add_resource(Signup,'/signup')
 
 
 if __name__ == "__main__":
