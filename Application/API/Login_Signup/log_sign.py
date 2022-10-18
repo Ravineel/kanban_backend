@@ -1,5 +1,6 @@
 from ast import arg
 from flask_restful import Api, Resource, fields, marshal_with, reqparse
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from Application.Validation import *
 from Application.model import *
 from Application.database import db
@@ -13,6 +14,17 @@ from datetime import datetime, timedelta
 login = reqparse.RequestParser()
 login.add_argument('username', type=str, required=True, help='username is required')
 login.add_argument('password', type=str, required=True, help='password is required')
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view='login'
+login_manager.needs_refresh_message = (u"Session timedout, please re-login")
+
+@login_manager.user_loader
+def load_user(id):
+    user  = User.query.get(int(id))
+    return user
 
 class Login(Resource):
   def post(self):
@@ -40,11 +52,12 @@ class Login(Resource):
       raise BusinessValidationError(code,error,msg)
     else:
       if check_password_hash(user.password_hash, password):
+        
         token = jwt.encode({
             'public_id': user.public_id,
-            'exp' : datetime.utcnow() + timedelta(minutes = 30)
+            'exp' : datetime.utcnow() + timedelta(minutes = 20)
         }, app.config['SECRET_KEY'])
-  
+        login_user(user)
         return make_response(jsonify({'token' : token}), 200)
         
       else:
