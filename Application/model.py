@@ -20,6 +20,7 @@ class User(db.Model,UserMixin):
     date_of_birth = db.Column(db.String, nullable=False)
     role=db.Column(db.String, nullable=False)
     account_created_at = db.Column(db.String, nullable=False)
+    jwt_token = db.Column(db.String, nullable=True)
     
     def get_id(self):
       return self.u_id
