@@ -38,11 +38,10 @@ def token_required(f):
     else:
       token = ''
     if not token:
-      raise TokenRequiredError()
+      raise ValidationError(401, "TK002", "Token is missing")
     
     try:
       data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-
       if moment.unix(data["exp"]) < moment.now():
         raise TokenExpiredError("error")
 
@@ -52,7 +51,7 @@ def token_required(f):
         raise TokenInvalidError()
     
     except TokenExpiredError as te:
-      raise ValidationError(401, "TK003", "Token is Expired!")
+      raise ValidationError(401, "TK003", "Token has Expired!")
     except TokenInvalidError as ti:
       raise ValidationError(401, "TK004", "Token is Invalid!")
     except TokenRequiredError as tr:

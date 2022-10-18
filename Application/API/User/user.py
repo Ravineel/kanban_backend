@@ -38,7 +38,6 @@ class UserApi(Resource):
   # @login_required
   @middleware.token_required
   def get(current_user,self):
-
     if current_user.public_id:
       user = User.query.filter_by(u_id=current_user.u_id).first()
       if user is None:
