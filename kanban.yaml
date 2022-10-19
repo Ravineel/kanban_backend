@@ -23,18 +23,18 @@ paths:
               allOf:
               - $ref: '#/components/schemas/signuprequest'
               - examples:
-                - fname: ravineel
-                  lname: Singhi
-                  mail: rajatsinghi89@gmail.com
-                  dob: 01/29/00
+                - fname: ravi
+                  lname: sh
+                  mail: mail@gmail.com
+                  dob: 29/03/20
                   username: ravi11
                   password: abc
               contentMediaType: application/json
             example:
-              fname: ravineel
-              lname: Singhi
-              mail: rajatsinghi89@gmail.com
-              dob: 01/29/00
+              fname: ravi
+              lname: sh
+              mail: mail@gmail.com
+              dob: 29/03/20
               username: ravi11
               password: abc
         required: true
