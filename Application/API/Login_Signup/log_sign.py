@@ -10,6 +10,7 @@ import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from datetime import datetime, timedelta
+import moment
 
 
 login = reqparse.RequestParser()
@@ -91,7 +92,8 @@ class Signup(Resource):
     username = args.get('username')
     password = args.get('password')
     role="user"
-    created="2022-10-17 00:00:00"
+    created=moment.now()
+    dob = moment.date(dob)
 
     if fname is None:
       msg="First name is required"
