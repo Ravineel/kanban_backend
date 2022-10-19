@@ -1,0 +1,448 @@
+openapi: 3.1.0
+info:
+  title: Kanban V2
+  contact: {}
+  version: '1.0'
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: http://127.0.0.1:5000
+  variables: {}
+paths:
+  /signup:
+    post:
+      tags:
+      - User
+      summary: signup
+      operationId: signup
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/signuprequest'
+              - examples:
+                - fname: ravineel
+                  lname: Singhi
+                  mail: rajatsinghi89@gmail.com
+                  dob: 01/29/00
+                  username: ravi11
+                  password: abc
+              contentMediaType: application/json
+            example:
+              fname: ravineel
+              lname: Singhi
+              mail: rajatsinghi89@gmail.com
+              dob: 01/29/00
+              username: ravi11
+              password: abc
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /login:
+    post:
+      tags:
+      - User
+      summary: login
+      operationId: login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/loginrequest'
+              - examples:
+                - username: ravi11
+                  password: abc
+              contentMediaType: application/json
+            example:
+              username: ravi11
+              password: abc
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - basic: []
+    parameters: []
+  /user:
+    get:
+      tags:
+      - User
+      summary: get user
+      operationId: getuser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /update_user:
+    put:
+      tags:
+      - User
+      summary: update user
+      operationId: updateuser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/updateuserrequest'
+              - examples:
+                - username: raj
+              contentMediaType: application/json
+            example:
+              username: raj
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /del_user:
+    delete:
+      tags:
+      - User
+      summary: delete user
+      operationId: deleteuser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /get_list:
+    get:
+      tags:
+      - List
+      summary: get list
+      operationId: getlist
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /create_list:
+    post:
+      tags:
+      - List
+      summary: create list
+      operationId: createlist
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /del_list:
+    delete:
+      tags:
+      - List
+      summary: delete list
+      operationId: deletelist
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/deletelistrequest'
+              - examples:
+                - l_id: 1
+              contentMediaType: application/json
+            example:
+              l_id: 1
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /update_list/2:
+    put:
+      tags:
+      - List
+      summary: update list
+      operationId: updatelist
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/updatelistrequest'
+              - examples:
+                - name: hi
+              contentMediaType: application/json
+            example:
+              name: hi
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /get_card:
+    get:
+      tags:
+      - Card
+      summary: get card
+      operationId: getcard
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /create_card:
+    post:
+      tags:
+      - Card
+      summary: create card
+      operationId: createcard
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/createcardrequest'
+              - examples:
+                - l_id: 2
+                  name: ASdasd
+                  description: sadasdasd
+                  deadline: 19/10/22
+              contentMediaType: application/json
+            example:
+              l_id: 2
+              name: ASdasd
+              description: sadasdasd
+              deadline: 19/10/22
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /complete_card/3:
+    put:
+      tags:
+      - Card
+      summary: complete_card
+      operationId: complete_card
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /del_card/6:
+    delete:
+      tags:
+      - Card
+      summary: delete card
+      operationId: deletecard
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+  /update_card/5:
+    put:
+      tags:
+      - Card
+      summary: update card
+      operationId: updatecard
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/updatecardrequest'
+              - examples:
+                - l_id: 1
+              contentMediaType: application/json
+            example:
+              l_id: 1
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    parameters: []
+components:
+  schemas:
+    signuprequest:
+      title: signuprequest
+      required:
+      - fname
+      - lname
+      - mail
+      - dob
+      - username
+      - password
+      type: object
+      properties:
+        fname:
+          type: string
+        lname:
+          type: string
+        mail:
+          type: string
+        dob:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+      examples:
+      - fname: ravineel
+        lname: Singhi
+        mail: rajatsinghi89@gmail.com
+        dob: 01/29/00
+        username: ravi11
+        password: abc
+    loginrequest:
+      title: loginrequest
+      required:
+      - username
+      - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      examples:
+      - username: ravi11
+        password: abc
+    updateuserrequest:
+      title: updateuserrequest
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+      examples:
+      - username: raj
+    deletelistrequest:
+      title: deletelistrequest
+      required:
+      - l_id
+      type: object
+      properties:
+        l_id:
+          type: integer
+          contentEncoding: int32
+      examples:
+      - l_id: 1
+    updatelistrequest:
+      title: updatelistrequest
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+      examples:
+      - name: hi
+    createcardrequest:
+      title: createcardrequest
+      required:
+      - l_id
+      - name
+      - description
+      - deadline
+      type: object
+      properties:
+        l_id:
+          type: integer
+          contentEncoding: int32
+        name:
+          type: string
+        description:
+          type: string
+        deadline:
+          type: string
+      examples:
+      - l_id: 2
+        name: ASdasd
+        description: sadasdasd
+        deadline: 19/10/22
+    updatecardrequest:
+      title: updatecardrequest
+      required:
+      - l_id
+      type: object
+      properties:
+        l_id:
+          type: integer
+          contentEncoding: int32
+      examples:
+      - l_id: 1
+  securitySchemes:
+    basic:
+      type: http
+      scheme: basic
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: User
+- name: List
+- name: Card

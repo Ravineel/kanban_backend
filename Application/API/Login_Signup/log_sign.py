@@ -92,8 +92,9 @@ class Signup(Resource):
     username = args.get('username')
     password = args.get('password')
     role="user"
-    created=moment.now()
-    dob = moment.date(dob)
+    created=moment.now().format('YYYY-MM-DD HH:mm:ss')
+    dob = moment.date(str(dob)).format('DD-MM-YYYY')
+    print(dob)
 
     if fname is None:
       msg="First name is required"
