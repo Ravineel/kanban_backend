@@ -1,7 +1,7 @@
 echo "Project will start running now ........."
 echo "Please wait ................."
 echo "............................."
-if [ -d ".env" ];
+if [ -d "env" ];
 then 
     echo "Virtual environment  exists and running it"
 else
@@ -9,8 +9,6 @@ else
     exit N
 fi
 
-source ./env/bin/activate
-export ENV=Development
-python app.py
+celery -A app.celery worker -l info
 
-echo "Project has started running ......."
+echo "workers have started running ......."

@@ -10,10 +10,14 @@ class Config():
     DEBUG=FALSE
     SQLITE_DB_DIR=None
     SQLALCHEMY_DATABASE_URI = None
+    CELERY_BROKER_URL = 'redis://localhost:6379/1'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
 
 class LocalDevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../db/db.sqlite3'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
+    CELERY_BROKER_URL = 'redis://localhost:6379/1'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
     

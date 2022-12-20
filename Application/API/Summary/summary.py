@@ -10,6 +10,9 @@ import moment
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+from Application.Backend_Jobs.Alert.task import update_time
+
+
 
 sdata= {
   "l_id":fields.Integer,
@@ -28,6 +31,9 @@ class SummaryApi(Resource):
     if List.query.filter_by(l_id=l_id).count() == 0:
       raise ValidationError(404,"LT001","No list found")
     try:
+      for c in Card.query.filter_by(l_id=l_id).all():
+        job = update_time.delay(c.c_id,request.headers['Authorization'])
+
       cards = Card.query.filter_by(l_id=l_id).count()
       cards2 = Card.query.filter_by(l_id=l_id).all()
       completed = Card.query.filter_by(l_id=l_id).filter_by(completed=2).count()

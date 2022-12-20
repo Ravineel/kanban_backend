@@ -94,7 +94,7 @@ class Signup(Resource):
     role="user"
     created=moment.now().format('YYYY-MM-DD HH:mm:ss')
     dob = moment.date(str(dob)).format('DD-MM-YYYY')
-    print(dob)
+
 
     if fname is None:
       msg="First name is required"
@@ -143,10 +143,18 @@ class Signup(Resource):
       pid=str(uuid.uuid4())
       new_user =User(public_id=pid,username=username,password_hash=pwd,email=mail,first_name=fname,last_name=lname,date_of_birth=dob,role=role,account_created_at=created)
       db.session.add(new_user)
+      # print(new_user.u_id)
+      # cu = User.query.filter_by(public_id=pid).first()
+      # schedule_alert = UserSchedule(u_id=pid,task_name="alert",frequency="daily",time="17:00:00",day="1",month="0",year="0")
+      # schedule_report = UserSchedule(u_id=pid,task_name="report",frequency="monthly",time="17:00:00",day="1",month="0",year="0")
+      # db.session.add(schedule_alert)
+      # db.session.add(schedule_report)
       db.session.commit()
+      
       return make_response(jsonify({'message' : 'New user created!'}), 200)
     except Exception as e:
-      
+      print(e)
+      db.session.rollback()
       raise ValidationError(404, "UR010", "Error creating user")
       
 

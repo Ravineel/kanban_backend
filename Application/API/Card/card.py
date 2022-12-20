@@ -7,6 +7,7 @@ from flask_restful import Resource,reqparse,marshal_with,fields
 from Application.Validation import *
 from datetime import datetime, timedelta
 import moment
+from Application.Backend_Jobs.Alert.task import update_time
 
 mult_card = {
     "c_id": fields.Integer,
@@ -29,13 +30,20 @@ class CardApi(Resource):
     if List.query.filter_by(u_id=current_user.u_id).count() == 0:
       raise ValidationError(404,"LT001","No list found")
     try:
+
+      # for l in List.query.filter_by(u_id=current_user.u_id).all():
+      #   for c in Card.query.filter_by(l_id=l.l_id).all():
+      #     job = update_time.delay(c.c_id,request.headers['Authorization'])
+      #     r = job.wait()
+
       cards = Card.query.join(List,Card.l_id==List.l_id)\
         .add_columns(Card.c_id, Card.l_id, Card.name, Card.description, Card.deadline, Card.completed,Card.date_of_submission,Card.created_at,Card.updated_at)\
         .filter(Card.l_id==List.l_id)\
         .filter(List.u_id==current_user.u_id).all()      
 
       return cards,200
-    except:
+    except Exception as e:
+      print(e)
       raise ValidationError(404,"CR001","Card not found")
 
   @token_required
@@ -97,7 +105,16 @@ class CardApi(Resource):
     except:
       raise ValidationError(500,"CR014","Card deletion failed")
 
-
+  @token_required
+  def patch(current_user,self,c_id):
+    try:
+      card = Card.query.filter_by(c_id=c_id).first()
+      if card.completed == 0 and moment.date(card.deadline)  < moment.now():
+        card.completed=1
+      db.session.commit()
+      return make_response(jsonify({"message":"Card updated successfully"}),200)
+    except:
+      raise ValidationError(500,"CR013","Card updation failed")
 class CardCompleteApi(Resource):
 
   @token_required
@@ -116,3 +133,5 @@ class CardCompleteApi(Resource):
       return make_response(jsonify({"message":msg}),200)
     except:
       raise ValidationError(500,"CR015","Card completion failed")
+  
+  

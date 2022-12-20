@@ -36,8 +36,19 @@ class User(db.Model,UserMixin):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
-
+# class UserSchedule(db.Model):
+#     __tablename__ = 'schedule'
+#     u_id = db.Column(db.Integer, db.ForeignKey('users.u_id'))
+#     s_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     task_name = db.Column(db.String, nullable=False)
+#     frequency = db.Column(db.String, nullable=False)
+#     time = db.Column(db.String, nullable=False)
+#     day = db.Column(db.Integer, nullable=False)
+#     month = db.Column(db.Integer, nullable=False)
+#     year = db.Column(db.Integer, nullable=False)
+#     isOn = db.Column(db.Integer, nullable=False, default=1)
+#     webhook_url = db.Column(db.String, nullable=False, default='https://chat.googleapis.com/v1/spaces/AAAAq_LS0Zo/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=j0snjacktfz17QYRygqECm9nC2-1_EtfNOvfy3nIbXE%3D')
+    
         
 class List(db.Model):
     __tablename__ ='list'
