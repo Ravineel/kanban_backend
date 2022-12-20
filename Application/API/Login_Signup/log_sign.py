@@ -64,7 +64,7 @@ class Login(Resource):
         tk = token.decode('UTF-8')
         user.jwt_token = tk
         db.session.commit()
-        return make_response(jsonify({'token' : token.decode('UTF-8')}), 200)
+        return make_response(jsonify({'token' :tk}), 200)
       else:
         msg="password is incorrect"
         code=404
