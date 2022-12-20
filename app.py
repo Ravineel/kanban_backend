@@ -33,7 +33,7 @@ from Application.API.Login_Signup.log_sign import Login,Signup,Logout
 from Application.API.User.user import UserApi
 from Application.API.List.list import ListAPI
 from Application.API.Card.card import CardApi,CardCompleteApi
-
+from Application.API.Summary.summary import SummaryApi
 
 api.add_resource(Signup,'/signup')
 api.add_resource(Login,'/login')
@@ -42,7 +42,7 @@ api.add_resource(UserApi,'/user','/update_user','/del_user')
 api.add_resource(ListAPI,'/get_list','/del_list','/update_list/<int:l_id>','/create_list')
 api.add_resource(CardApi,'/get_card','/del_card/<int:c_id>','/update_card/<int:c_id>','/create_card')
 api.add_resource(CardCompleteApi,'/complete_card/<int:c_id>')
-
+api.add_resource(SummaryApi,'/summary/<int:l_id>')
 
 if __name__ == "__main__":
   app.run(debug=True, host='0.0.0.0', port=5000)
